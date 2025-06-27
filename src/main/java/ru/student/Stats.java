@@ -54,8 +54,12 @@ public class Stats {
             FloatStats floatStats = new FloatStats(floats);
             StringStats stringStats = new StringStats(strings);
 
+
+            System.out.println(" ");
             integerStats.print();
+            System.out.println(" ");
             floatStats.print();
+            System.out.println(" ");
             stringStats.print();
 
         }

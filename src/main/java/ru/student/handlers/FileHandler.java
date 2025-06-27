@@ -117,11 +117,22 @@ public class FileHandler {
     }
 
     public void WriteFiles(){
-            try {
 
-                FileWriter integers_writer = new FileWriter(workdir+"/"+prefix+"integers.txt",append_mode);
-                FileWriter floats_writer = new FileWriter(workdir+"/"+prefix+"floats.txt",append_mode);
-                FileWriter strings_writer = new FileWriter(workdir+"/"+prefix+"strings.txt",append_mode);
+            try {
+                FileWriter integers_writer = null;
+                FileWriter floats_writer = null;
+                FileWriter strings_writer = null;
+
+                if (workdir != ""){
+                    integers_writer = new FileWriter(workdir+"/"+prefix+"integers.txt",append_mode);
+                    floats_writer = new FileWriter(workdir+"/"+prefix+"floats.txt",append_mode);
+                    strings_writer = new FileWriter(workdir+"/"+prefix+"strings.txt",append_mode);
+                }else {
+                    integers_writer = new FileWriter(prefix+"integers.txt",append_mode);
+                    floats_writer = new FileWriter(prefix+"floats.txt",append_mode);
+                    strings_writer = new FileWriter(prefix+"strings.txt",append_mode);
+                }
+
 
                 for(long i : integers) integers_writer.write(String.valueOf(i) + "\n");
                 integers_writer.close();
