@@ -18,11 +18,11 @@ public class FileHandler {
     boolean append_mode = false;
 
     ArrayList<String> strings = new ArrayList<>();
-    ArrayList<Integer> integers = new ArrayList<>();
+    ArrayList<Long> integers = new ArrayList<>();
     ArrayList<Float> floats = new ArrayList<>();
 
     public ArrayList<String> getStrings() {return strings;}
-    public ArrayList<Integer> getIntegers() {return integers;}
+    public ArrayList<Long> getIntegers() {return integers;}
     public ArrayList<Float> getFloats() {return floats;}
 
     public FileHandler(ArrayList<String> args, String workdir, String prefix, boolean append_mode){
@@ -42,7 +42,7 @@ public class FileHandler {
     public void CheckFiles(){
         for (int i = 0 ; i < args.size(); i++){
             File file = new File(args.get(i));
-            if (!file.exists() && !file.isFile()){ // Если файла не существет и это не файл - для проверки на директорию
+            if (!file.exists() && !file.isFile()){// Если файла не существет и это не файл - для проверки на директорию
                 System.out.println("Неверное значение агрумента("+i+")");
                 System.out.println("Файла не существует в заданной директории");
                 // Файла не существует, удаляем его из списка аргументов
@@ -51,18 +51,62 @@ public class FileHandler {
         }
     }
 
+
+    int getFileSize(File file) { // Returns file size in lines
+        int size = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = "";
+            while ((line = reader.readLine()) != null)size++;
+            reader.close();
+        }catch (FileNotFoundException e){
+            throw new RuntimeException();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return size;
+    }
+
+    int getMaxFilesSize(){
+        int max_size = 0;
+        for (int i = 0 ; i < args.size() ; i++){
+            int current_file_size = getFileSize(new File(args.get(i)));
+            if(current_file_size > max_size) max_size = current_file_size;
+        }
+        return max_size;
+    }
+
     public void ReadFiles(){
         Parser parser = new Parser();
-        for (String arg : args){
-            File file = new File(arg);
+        ArrayList<BufferedReader> readers = new ArrayList<>();
+        for (int i = 0; i < args.size() ; i++){
+            File file = new File(args.get(i));
             try {
-                String line = "";
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                // Parse file into buffers
-                while ((line = reader.readLine()) != null) parser.parse(line);
-                reader.close();
+                readers.add(new BufferedReader(new FileReader(file)));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        // Parse file into buffers acording to queue
+        for (int j = 0 ; j < getMaxFilesSize() ; j++){
+            for (int i = 0; i < args.size(); i++){
+                try {
+                    String line = readers.get(i).readLine();
+                    if (line != null) parser.parse(line);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+        // Close all the readers
+
+        for (BufferedReader reader : readers){
+            try {
+                reader.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -74,11 +118,12 @@ public class FileHandler {
 
     public void WriteFiles(){
             try {
+
                 FileWriter integers_writer = new FileWriter(workdir+"/"+prefix+"integers.txt",append_mode);
                 FileWriter floats_writer = new FileWriter(workdir+"/"+prefix+"floats.txt",append_mode);
                 FileWriter strings_writer = new FileWriter(workdir+"/"+prefix+"strings.txt",append_mode);
 
-                for(int i : integers) integers_writer.write(String.valueOf(i) + "\n");
+                for(long i : integers) integers_writer.write(String.valueOf(i) + "\n");
                 integers_writer.close();
 
                 for(float f : floats) floats_writer.write(String.valueOf(f) + "\n");

@@ -72,15 +72,12 @@ public class FlagHandler {
                 if(args.size() > 1){
                     result = args.get(i+1);
                     // Remove flag and argument from list of args
-                    args.remove(i);
                     args.remove(i+1);
+                    args.remove(i);
                 }else{
                     System.out.println("Пустой агрумент для флага -o");
                     System.exit(1);
                 }
-                File file = new File(result);
-                if(!file.exists()){System.out.println("Неправильный аргумент для флага -o" +
-                "(директория не существует)");System.exit(1);}
                 break;
             }
         }
@@ -92,10 +89,12 @@ public class FlagHandler {
         for (int i = 0 ; i < args.size() ; i++){
             if (args.get(i).equalsIgnoreCase(Flags.PREFIX_FLAG.toString())) { // Works for both cases(-flag,-Flag)
                 if (args.size() > 1) {
+
                     result = args.get(i+1);
                     // Remove flag and argument from list of args
-                    args.remove(i);
                     args.remove(i+1);
+                    args.remove(i);
+
                 } else {
                     System.out.println("Пустой агрумент для флага -p");
                     System.exit(1);

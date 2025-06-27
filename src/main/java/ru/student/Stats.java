@@ -17,7 +17,7 @@ public class Stats {
     // Collections
 
     ArrayList<String> strings = new ArrayList<>();
-    ArrayList<Integer> integers = new ArrayList<>();
+    ArrayList<Long> integers = new ArrayList<>();
     ArrayList<Float> floats = new ArrayList<>();
 
     // Simple stats

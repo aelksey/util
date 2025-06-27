@@ -25,6 +25,7 @@ public class Util {
     }
 
     public void run(){
+
         if (args.length == 0) {
             flagHandler.printManpage();
             System.exit(1);

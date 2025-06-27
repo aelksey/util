@@ -25,7 +25,8 @@ public class FloatStats {
     }
 
     float getMin() {
-        float min = floats.get(0);
+        float min = 0;
+        if(size > 0) min = floats.get(0);
         for (int i = 0; i < floats.size(); i++) {
             if (floats.get(i) < min) min = floats.get(i);
         }
@@ -33,7 +34,8 @@ public class FloatStats {
     }
 
     float getMax() {
-        float max = floats.get(0);
+        float max = 0;
+        if(size > 0) max = floats.get(0);
         for (int i = 0; i < floats.size(); i++) {
             if (floats.get(i) > max) max = floats.get(i);
         }
@@ -48,7 +50,11 @@ public class FloatStats {
         return sum;
     }
 
-    float getAverage() {return (getSum()/floats.size());}
+    float getAverage() {
+        float result = 0;
+        if(getSum() > 0 && floats.size() > 0) result = getSum()/floats.size();
+        return result;
+    }
 
     public void print(){
         System.out.println("Статистика по типу float :");

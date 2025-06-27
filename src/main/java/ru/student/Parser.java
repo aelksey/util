@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Parser {
 
     ArrayList<String> strings = new ArrayList<>();
-    ArrayList<Integer> integers = new ArrayList<>();
+    ArrayList<Long> integers = new ArrayList<>();
     ArrayList<Float> floats = new ArrayList<>();
 
     public ArrayList<String> getStrings() {return strings;}
 
-    public ArrayList<Integer> getIntegers() {return integers;}
+    public ArrayList<Long> getIntegers() {return integers;}
 
     public ArrayList<Float> getFloats() {return floats;}
 
@@ -23,7 +23,7 @@ public class Parser {
         // Integer -> float -> String
 
         try {
-            integers.add(Integer.parseInt(string));
+            integers.add(Long.parseLong(string));
         } catch (NumberFormatException e) {
             // Ловим exception - переходим дальше в цепочке парсинга
             try {
